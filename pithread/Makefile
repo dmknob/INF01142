@@ -7,15 +7,29 @@
 # NECESSARIO adaptar este esqueleto de makefile para suas necessidades.
 #
 # OBSERVAR que as variáveis de ambiente consideram que o Makefile está no diretótio "pithread"
-# 
+#
 
 CC=gcc
 LIB_DIR=./lib
 INC_DIR=./include
 BIN_DIR=./bin
 SRC_DIR=./src
+TST_DIR=./testes
 
-all: regra1 regra2 regran
+all: libpithread
+	ls -R
+
+libpithread: pithread.o
+	ar crs $(LIB_DIR)/libpithread.a $(BIN_DIR)/pithread.o
+
+pithread.o:
+	$(CC) -o $(BIN_DIR)/pithread.o -c $(SRC_DIR)/pithread.c -Wall
+
+teste1:	teste1.o
+	$(CC) -o $(TST_DIR)/teste1 -c $(BIN_DIR)/teste1.o –L../lib –lpithread -Wall
+
+teste1.o:
+	$(CC) -o $(BIN_DIR)/teste1.o -c $(TST_DIR)/teste1.c -Wall
 
 regra1: #dependências para a regra1
 	$(CC) -o $(BIN_DIR)regra1 $(SRC_DIR)regra1.c -Wall
@@ -28,5 +42,4 @@ regran: #dependências para a regran
 
 clean:
 	rm -rf $(LIB_DIR)/*.a $(BIN_DIR)/*.o $(SRC_DIR)/*~ $(INC_DIR)/*~ *~
-
-
+	ls -R

@@ -1,22 +1,25 @@
 /*
- * pidata.h: arquivo de inclusão de uso apenas na geração da libpithread
+ * pidata.h: arquivo de inclusï¿½o de uso apenas na geraï¿½ï¿½o da libpithread
  *
  * Esse arquivo pode ser modificado. ENTRETANTO, deve ser utilizada a TCB fornecida.
  *
  */
+
+ #include <ucontext.h>
+
 #ifndef __pidata__
 #define __pidata__
 
-/* NÃO ALTERAR ESSA struct */
-typedef struct TCB { 
+/* Nï¿½O ALTERAR ESSA struct */
+typedef struct TCB {
 	int	tid; 			// identificador da thread
 	int	state;			// estado em que a thread se encontra
-					// 0: Criação; 1: Apto; 2: Execução; 3: Bloqueado e 4: Término
-	int	credCreate;		// créditos de criação da thread (atribuídos na criação)
-	int	credReal; 		// créditos atuais da thread (usado para determinar a prioridade atual da thread)
-	ucontext_t 	context;	// contexto de execução da thread (SP, PC, GPRs e recursos) 
+					// 0: Criaï¿½ï¿½o; 1: Apto; 2: Execuï¿½ï¿½o; 3: Bloqueado e 4: Tï¿½rmino
+	int	credCreate;		// crï¿½ditos de criaï¿½ï¿½o da thread (atribuï¿½dos na criaï¿½ï¿½o)
+	int	credReal; 		// crï¿½ditos atuais da thread (usado para determinar a prioridade atual da thread)
+	ucontext_t 	context;	// contexto de execuï¿½ï¿½o da thread (SP, PC, GPRs e recursos)
 	struct TCB 	*prev; 		// ponteiro para o TCB anterior da lista
-	struct TCB 	*next; 		// ponteiro para o próximo TCB da lista
-} TCB_t; 
+	struct TCB 	*next; 		// ponteiro para o prï¿½ximo TCB da lista
+} TCB_t;
 
 #endif
