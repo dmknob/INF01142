@@ -13,11 +13,12 @@
 
 void* func0(void *arg) {
 	printf("Eu sou a thread ID0 imprimindo %d\n", *((int *)arg));
-	return;
+	return 0;
 }
 
 void* func1(void *arg) {
 	printf("Eu sou a thread ID1 imprimindo %d\n", *((int *)arg));
+	return 0;
 }
 
 int main(int argc, char *argv[]) {
@@ -34,4 +35,5 @@ int main(int argc, char *argv[]) {
     piwait(id1);
 
     printf("Eu sou a main voltando para terminar o programa\n");
+		return 0;
 }

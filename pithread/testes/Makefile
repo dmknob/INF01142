@@ -5,10 +5,13 @@ BIN_DIR=./bin
 SRC_DIR=./src
 TST_DIR=./testes
 
-all: teste1.x
+all: libpithread teste1.x
 
-teste1.x:
+teste1.x: libpithread
 	$(CC) -o teste1.x teste1.c -L../lib -lpithread -Wall
+
+libpithread:
+	make -C .. libpithread
 
 lista1:
 	$(CC) -o lista1.x lista1.c -Wall
