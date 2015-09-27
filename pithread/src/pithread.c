@@ -11,7 +11,7 @@ TCB_t *TCBmain ; //Declara o TCB da thread main
 TCB_t *TCBnew ; //Declara o TCB da thread main
 char thr_stack[SIGSTKSZ];
 
-int picreate (int credCreate, void* (*start)(void*), void *arg)
+int picreate (int credCreate, void *(*start)(void*), void *arg)
 {
   printf("DBG - chamado picriate(). ID: %d\n", id);
   if (inicializada != 0) //Primeira chamada a funcao.
@@ -50,8 +50,11 @@ int picreate (int credCreate, void* (*start)(void*), void *arg)
   thrcontext.uc_link = &context;
   thrcontext.uc_stack.ss_sp = thr_stack;
   thrcontext.uc_stack.ss_size = sizeof(thr_stack);
+  
+  //printf("argumento = 0x%08x\n",*(int*)arg);
+  
   makecontext(&thrcontext, (void (*)(void)) start, 1, arg);
-  swapcontext(&context, &thrcontext);
+  swapcontext(&context, &thrcontext); 
   //setcontext(&thrcontext);
 
   //TCBmain->context = context;
