@@ -3,15 +3,15 @@
 #include "../include/pidata.h"
 
 #define INIT_SIZE 1
-#define MAX_PRIORITY 100 
+#define MAX_PRIORITY 100
 
 TCB_t *remove_element(TCB_t *first, TCB_t *deleted)
-{  
+{
     if (deleted->next != NULL)
     {
       deleted->next->prev = deleted->prev;
     }
-      
+
     if (deleted->prev!=NULL)
     {
       deleted->prev->next = deleted->next;
@@ -26,17 +26,17 @@ TCB_t *remove_element(TCB_t *first, TCB_t *deleted)
     }
     deleted->next = NULL;
     deleted->prev = NULL;
-    
+
     return first;
 }
 
 TCB_t *delete_element(TCB_t *first, TCB_t *deleted)
-{  
+{
     if (deleted->next != NULL)
     {
       deleted->next->prev = deleted->prev;
     }
-      
+
     if (deleted->prev!=NULL)
     {
       deleted->prev->next = deleted->next;
@@ -60,7 +60,7 @@ TCB_t *new_element(TCB_t *element, int new_tid, int new_credCreate)
     new->tid = new_tid;
     new->credCreate = new_credCreate;
     new->credReal = new_credCreate;
-    
+
     if(element == NULL)
     {
       new->prev = NULL;
@@ -73,10 +73,10 @@ TCB_t *new_element(TCB_t *element, int new_tid, int new_credCreate)
       new->next = element->next;
       if (element->next != NULL)
       {
-	element->next->prev = new; 
+	element->next->prev = new;
       }
       element->next = new;
-      
+
     }
     else
     {
@@ -121,7 +121,7 @@ TCB_t *move_element(TCB_t *first, TCB_t *element, int credReal)
 {
   TCB_t *found;
   found = find_element(first,credReal);
-  
+
   //desconnecting
   if(element->next != NULL)
   {
@@ -136,7 +136,7 @@ TCB_t *move_element(TCB_t *first, TCB_t *element, int credReal)
     first = element->next;
     first->prev = NULL;
   }
-  
+
   //connecting
   if(credReal > found->credReal)
   {
@@ -157,9 +157,9 @@ TCB_t *move_element(TCB_t *first, TCB_t *element, int credReal)
     found->next = element;
     element->prev = found;
   }
-  
+
   element->credReal = credReal;
-  
+
   return first;
 }
 
@@ -175,7 +175,7 @@ TCB_t *insert_element(TCB_t *first, TCB_t *element)
       element->next = found->next;
       if (found->next != NULL)
       {
-	found->next->prev = element; 
+	found->next->prev = element;
       }
       found->next = element;
     }
@@ -193,7 +193,7 @@ TCB_t *insert_element(TCB_t *first, TCB_t *element)
     element->prev = NULL;
     first = element;
   }
-    
+
   return first;
 }
 
@@ -210,7 +210,7 @@ TCB_t *insert_new(TCB_t *first, int credCreate, int tid)
     found = NULL;
   }
   new = new_element(found,tid,credCreate);
-  
+
   if((found == NULL)||((found == first)&&(credCreate > found->credCreate)))
   {
       first = new;
@@ -255,36 +255,36 @@ void print_list(TCB_t *first)
   }
 }
 
-/*
+
 int main()
 {
   TCB_t *first = NULL;
   TCB_t *wait = NULL;
   TCB_t *transf;
   int tid = 0;
-  
+
   first = insert_new(first,100,tid++);
   first = insert_new(first,90,tid++);
   first = insert_new(first,80,tid++);
-  first = insert_new(first,70,tid++); 
+  first = insert_new(first,70,tid++);
   first = insert_new(first,90,tid++);
   //first = delete_element(first,find_tid(first,6));
   //wait = remove_element(first,find_tid(first,7));
   print_list(first);
   print_list(wait);
-  
+
   transf = find_tid(first,4);
   first  = remove_element(first,transf);
   wait   = insert_element(wait,transf);
-  
+
   transf = find_tid(first,1);
   first  = remove_element(first,transf);
   wait   = insert_element(wait,transf);
-  
+
   print_list(first);
   print_list(wait);
-  
-  
+
+
   //print_list(wait);
   return(0);
-}*/
+}
