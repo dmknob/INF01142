@@ -6,11 +6,12 @@
 #define MAX_PRIORITY 100
 
 TCB_t *remove_element(TCB_t *first, TCB_t *deleted)
+//Retira elemento de uma lista.
 {
-    if (deleted->next != NULL)
+    /*if (deleted->next != NULL)
     {
       deleted->next->prev = deleted->prev;
-    }
+    }*/
 
     if (deleted->prev!=NULL)
     {
@@ -31,6 +32,7 @@ TCB_t *remove_element(TCB_t *first, TCB_t *deleted)
 }
 
 TCB_t *delete_element(TCB_t *first, TCB_t *deleted)
+//Retira elemento de uma lista e apaga.
 {
     if (deleted->next != NULL)
     {

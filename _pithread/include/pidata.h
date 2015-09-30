@@ -4,11 +4,8 @@
  * Esse arquivo pode ser modificado. ENTRETANTO, deve ser utilizada a TCB fornecida.
  *
  */
-#include <ucontext.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "../include/pithread.h"
 
+#include <ucontext.h>
 #ifndef __pidata__
 #define __pidata__
 

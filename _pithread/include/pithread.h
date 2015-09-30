@@ -1,16 +1,16 @@
 /*
- * pithread.h: arquivo de inclusï¿½o com os protï¿½tipos das funï¿½ï¿½es a serem
- *             implementadas na realizaï¿½ï¿½o do trabalho.
+ * pithread.h: arquivo de inclusão com os protótipos das funções a serem
+ *             implementadas na realização do trabalho.
  *
- * Nï¿½O MODIFIQUE ESTE ARQUIVO.
+ * NÃO MODIFIQUE ESTE ARQUIVO.
  *
- * VERSï¿½O 1 - 17/08/2015
+ * VERSÃO 1 - 17/08/2015
  */
 #ifndef __pithread__
 #define __pithread__
 
 typedef struct mutex {
-	int	flag; 			// indica se o mutex foi adquirido ou nï¿½o (1: livre; 0: ocupado)
+	int	flag; 			// indica se o mutex foi adquirido ou não (1: livre; 0: ocupado)
 	struct TCB	*first, *last; 	// ponteiros para lista de threads bloqueadas no mutex
 } pimutex_t;
 

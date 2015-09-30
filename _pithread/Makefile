@@ -17,15 +17,13 @@ SRC_DIR=./src
 TST_DIR=./testes
 
 all: libpithread
+	make -C testes all
 
-libpithread: pithread.o listmanager.o
-	ar crs $(LIB_DIR)/libpithread.a $(BIN_DIR)/pithread.o $(BIN_DIR)/listmanager.o
+libpithread: pithread.o
+	ar crs $(LIB_DIR)/libpithread.a $(BIN_DIR)/pithread.o
 
 pithread.o:
 	$(CC) -o $(BIN_DIR)/pithread.o -c $(SRC_DIR)/pithread.c -Wall
-
-listmanager.o:
-	$(CC) -o $(BIN_DIR)/listmanager.o -c $(SRC_DIR)/listmanager.c -Wall
 
 regra1: #dependências para a regra1
 	$(CC) -o $(BIN_DIR)regra1 $(SRC_DIR)regra1.c -Wall
