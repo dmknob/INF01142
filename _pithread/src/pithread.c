@@ -26,8 +26,7 @@ void print_element(TCB_t *element){
   printf("---------------------------------------------\n");
 }
 
-int picreate (int credCreate, void *(*start)(void*), void *arg)
-{
+int picreate (int credCreate, void *(*start)(void*), void *arg){
   //printf("DBG - chamado picriate(). ID: %d\n", id);
   if (inicializada != 0) //Primeira chamada a funcao.
   {
@@ -92,6 +91,7 @@ int piyield(void){
   }
   return -1;
 }
+
 int piwait(int tid){
   if (inicializada!=0) //Primeira chamada a funcao.
   {
@@ -105,6 +105,7 @@ int piwait(int tid){
   setcontext(&(tcb[tid]->context));
   return 0;
 }
+
 int pimutex_init(pimutex_t *mtx){
   if (inicializada!=0) //Primeira chamada a funcao.
   {
@@ -113,6 +114,7 @@ int pimutex_init(pimutex_t *mtx){
   }
   return -1;
 }
+
 int pilock (pimutex_t *mtx){
   if (inicializada!=0) //Primeira chamada a funcao.
   {
@@ -121,6 +123,7 @@ int pilock (pimutex_t *mtx){
   }
   return -1;
 }
+
 int piunlock (pimutex_t *mtx){
   if (inicializada!=0) //Primeira chamada a funcao.
   {

@@ -18,6 +18,12 @@ void* func0(void *arg) {
 
 void* func1(void *arg) {
 	printf("Eu sou a thread ID1 imprimindo %d\n", *((int *)arg));
+	return;
+}
+
+void* func2(void *arg) {
+	printf("Eu sou a thread ID2 imprimindo %d\n", *((int *)arg));
+	return;
 }
 
 int main(int argc, char *argv[]) {
@@ -25,13 +31,14 @@ int main(int argc, char *argv[]) {
   int	id0, id1, id2;
 	int i;
 
-    id0 = picreate(1, func0, (void *)&i);
-    id1 = picreate(2, func1, (void *)&i);
-		id2 = picreate(3, func1, (void *)&i);
-    printf("Eu sou a main apos a criacao de ID0 e ID1\n");
+    id0 = picreate(10, func0, (void *)&i);
+    id1 = picreate(20, func1, (void *)&i);
+		id2 = picreate(30, func2, (void *)&i);
+    printf("Eu sou a main apos a criacao de ID0, ID1 e ID2\n");
 
-    piwait(id0);
-    piwait(id1);
+    printf("piwait id0: %d\n", piwait(id0));
+    printf("piwait id1: %d\n", piwait(id1));
+		//piwait(id2);
 
     printf("Eu sou a main voltando para terminar o programa\n");
 
