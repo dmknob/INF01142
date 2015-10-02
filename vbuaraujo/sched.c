@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <ucontext.h>
 
-#include "sched.h"
+//#include "sched.h"
 
 #define free_and_null(p) ({ if (p) { free(p); p=NULL; } })
 #define SO_THREAD_STACK_SIZE 65536
@@ -19,6 +19,23 @@ typedef struct thread_t {
 thread_t *so_current, *so_previous;
 int so_next_tid = 0;
 ucontext_t so_exit_context;
+
+void so_exit(int status) {
+	if (so_previous == so_current) {
+		printf("Last thread exited (status %d)!\n", status);
+		exit(status);
+	}
+
+	thread_t *dead = so_current;
+	so_current = so_current->next;
+	so_previous->next = so_current;
+
+	dead->status = status;
+	dead->next = NULL;  // This is used to check for death in so_join.
+	so_forgo_thread(dead);
+	setcontext(&so_current->context);
+}
+
 
 thread_t *so_make_thread() {
 	thread_t *new = malloc(sizeof(thread_t));
@@ -73,21 +90,6 @@ void so_yield() {
 	swapcontext(&so_previous->context, &so_current->context);
 }
 
-void so_exit(int status) {
-	if (so_previous == so_current) {
-		printf("Last thread exited (status %d)!\n", status);
-		exit(status);
-	}
-
-	thread_t *dead = so_current;
-	so_current = so_current->next;
-	so_previous->next = so_current;
-
-	dead->status = status;
-	dead->next = NULL;  // This is used to check for death in so_join.
-	so_forgo_thread(dead);
-	setcontext(&so_current->context);
-}
 
 thread_t *so_find_thread(int tid) {
 	thread_t *th = so_current;
