@@ -22,10 +22,10 @@ libpithread: pithread.o listmanager.o
 	ar crs $(LIB_DIR)/libpithread.a $(BIN_DIR)/pithread.o $(BIN_DIR)/listmanager.o
 
 pithread.o:
-	$(CC) -o $(BIN_DIR)/pithread.o -c $(SRC_DIR)/pithread.c -Wall
+	$(CC) -g -O0 -o $(BIN_DIR)/pithread.o -c $(SRC_DIR)/pithread.c -Wall
 
 listmanager.o:
-	$(CC) -o $(BIN_DIR)/listmanager.o -c $(SRC_DIR)/listmanager.c -Wall
+	$(CC) -g -O0 -o $(BIN_DIR)/listmanager.o -c $(SRC_DIR)/listmanager.c -Wall
 
 regra1: #dependências para a regra1
 	$(CC) -o $(BIN_DIR)regra1 $(SRC_DIR)regra1.c -Wall

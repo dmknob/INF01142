@@ -7,7 +7,8 @@ TCB_t *exec = NULL; //'lista' da thread em execução
 TCB_t *maintcb = NULL;
 TCB_t *temp = NULL; //ponteiro temporario
 ucontext_t context; //Armazena o contexto
-char stack[SIGSTKSZ]; //pilha para contextos
+//char stack[SIGSTKSZ]; //pilha para contextos
+char stack[65536]; //pilha para contextos
 int id = 0; //controle de IDs de threads
 
 void dispatcher(void)
@@ -52,7 +53,8 @@ int picreate (int credCreate, void* (*start)(void*), void *arg){
     exec = insert_new(aptos, 100, id);
     maintcb = exec;
     printf("main context: %p\n", maintcb->context);
-    //getcontext(&(exec->context));
+    printf("main context uclink: %p\n", maintcb->context.uc_link);
+    getcontext(&maintcb->context);
   }
 
   id = id+1;
@@ -64,7 +66,8 @@ int picreate (int credCreate, void* (*start)(void*), void *arg){
     //printf("DBG - salva contexto\n");
     getcontext(&context);
     context.uc_link = &(maintcb->context);
-    context.uc_stack.ss_sp = stack;
+    //context.uc_stack.ss_sp = stack;
+    context.uc_stack.ss_sp = malloc(sizeof(stack));
     context.uc_stack.ss_size = sizeof(stack);
     makecontext(&context, (void (*)(void)) start, 1, arg);
     temp->context = context;
