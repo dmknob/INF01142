@@ -31,22 +31,22 @@ TCB_t *new_element(TCB_t *element, int new_tid, int new_credCreate)
     return new;
 }
 
-TCB_t *remove_element(TCB_t *first, TCB_t *deleted)
+TCB_t *remove_element(TCB_t *first, TCB_t *removed)
 { //remove elemento da lista (desencadeia)
-    if (deleted->next != NULL){
-      deleted->next->prev = deleted->prev;
+    if (removed->next != NULL){
+      removed->next->prev = removed->prev;
     }
-    if (deleted->prev!=NULL){
-      deleted->prev->next = deleted->next;
+    if (removed->prev!=NULL){
+      removed->prev->next = removed->next;
     }
     else{
-      first = deleted->next;
+      first = removed->next;
       if(first != NULL){
         first->prev = NULL;
       }
     }
-    deleted->next = NULL;
-    deleted->prev = NULL;
+    removed->next = NULL;
+    removed->prev = NULL;
     return first;
 }
 

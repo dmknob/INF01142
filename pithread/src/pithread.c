@@ -8,28 +8,30 @@ TCB_t *maintcb = NULL;
 TCB_t *temp = NULL; //ponteiro temporario
 ucontext_t context; //Armazena o contexto
 //char stack[SIGSTKSZ]; //pilha para contextos
-char stack[65536]; //pilha para contextos
+char stack[65536] = ""; //pilha para contextos
 int id = 0; //controle de IDs de threads
 
 void dispatcher(void)
 { //despachante
   printf("-Dispatcher:\n");
 
-  printf("Dispatcher      Troca context\n");
-  print_element(exec);
-  printf("Dispatcher      exec uclink: %p\n", exec->context.uc_link);
+  //printf("Dispatcher      Troca context\n");
+  //print_element(exec);
+  //printf("Dispatcher      exec uclink: %p\n", exec->context.uc_link);
   //printf("Dispatcher      Contexto exec: %p\n", &exec->context);
   //context = exec->context;
   //printf("Dispatcher      uclink: %p\n", context.uc_link);
   //setcontext(&exec->context);
-  printf("main %p - exec %p\n", maintcb->context, exec->context);
-  swapcontext(&maintcb->context, &exec->context);
+  //printf("main %p - exec %p\n", maintcb->context, exec->context);
+  getcontext(&aptos->context);
+  setcontext(&exec->context);
+  //swapcontext(&maintcb->context, &exec->context);
+  return;
 }
 
 void sched(void)
 { //escalonador
   printf("-Sched:\n");
-
   if (aptos == NULL){ //Acabou os aptos
     temp = aptos;
     aptos = aptos_exp;
@@ -40,9 +42,9 @@ void sched(void)
     }
 */
   }
-  printf("Sched           Muda exec\n");
+  //printf("Sched           Muda exec\n");
   exec = aptos; //'muda a thread em execução'
-  printf("Sched           Remove apto\n");
+  //printf("Sched           Remove apto\n");
   aptos = remove_element(aptos, aptos);  //retira a thread que vai para execução da lista de aptos
   //print_element(maintcb);
   dispatcher();
@@ -52,13 +54,13 @@ int picreate (int credCreate, void* (*start)(void*), void *arg){
   if (id == 0){ //primeira thread(main), inicializando biblioteca.
     exec = insert_new(aptos, 100, id);
     maintcb = exec;
-    printf("main context: %p\n", maintcb->context);
-    printf("main context uclink: %p\n", maintcb->context.uc_link);
+    //printf("main context: %p\n", maintcb->context);
+    //printf("main context uclink: %p\n", maintcb->context.uc_link);
     getcontext(&maintcb->context);
   }
 
   id = id+1;
-  printf("Incrementei ID: %d\n", id);
+  printf("Picreate - incrementei ID para: %d\n", id);
   aptos = insert_new(aptos, credCreate, id);
 
   temp = find_tid(aptos, id); //ponteiro para o TCB dessa thread
@@ -87,6 +89,12 @@ int piyield(void){
   if (id == 0){ //nao inicializada
     return -1;
   }
+  printf("-Piyield\n");
+  //printf("Piyield          Ajusta creditos.\n");
+  exec->credReal = (exec->credReal) - 10; //atualiza os creditos
+  aptos = insert_element(aptos, exec);
+  exec = NULL;
+  sched();
   return 0;
 }
 
@@ -107,10 +115,10 @@ int piwait(int tid){
   }
   */
 
-  printf("piwait          Ajusta creditos.\n");
+  //printf("piwait          Ajusta creditos.\n");
   exec->credReal = (exec->credReal) - 10; //atualiza os creditos
   exec->state = (-1) * tid;  //HACK, salva qual a thread que originou o bloqueio
-  printf("piwait          Bloqueia.\n");
+  //printf("piwait          Bloqueia.\n");
   bloqueados = insert_element(bloqueados, exec);  //troca de executando pra bloqueado
   sched();
   return 0;
