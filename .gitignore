@@ -30,3 +30,8 @@
 
 # Debug files
 *.dSYM/
+
+!pithread/bin/
+!pithread/lib/
+pithread/bin/*
+pithread/lib/*
