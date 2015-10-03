@@ -47,6 +47,8 @@ TCB_t *remove_element(TCB_t *first, TCB_t *removed)
     }
     removed->next = NULL;
     removed->prev = NULL;
+    removed->next = NULL;
+    removed->prev = NULL;
     return first;
 }
 
@@ -178,10 +180,10 @@ void print_element(TCB_t *element){
     printf("element->state      = %d    \n",element->state);
     printf("element->credCreate = %d    \n",element->credCreate);
     printf("element->credReal   = %d    \n",element->credReal);
-    printf("&element            = %p    \n",element);
     printf("element->context    = %p    \n",&element->context);
-    printf("element->prev       = %p    \n",element->prev);
-    printf("element->next       = %p    \n",element->next);
+    printf("&element            = %p\n",element);
+    printf("element->prev       = %p\n",element->prev);
+    printf("element->next       = %p\n",element->next);
     printf("---------------------------------------------\n");
   }
 }
@@ -197,7 +199,7 @@ void print_list(TCB_t *first){
       printf("list->state      = %d    \n",first->state);
       printf("list->credCreate = %d    \n",first->credCreate);
       printf("list->credReal   = %d    \n",first->credReal);
-      printf("list->context   = %p    \n",&first->context);
+      printf("first->context   = %p    \n",&first->context);
       if(first->prev!=NULL){
         printf("list->prev       = %d\n",first->prev->tid);//0x%08x\n",first->prev);
       }

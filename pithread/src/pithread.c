@@ -23,9 +23,9 @@ void dispatcher(void)
   //printf("Dispatcher      uclink: %p\n", context.uc_link);
   //setcontext(&exec->context);
   //printf("main %p - exec %p\n", maintcb->context, exec->context);
-  getcontext(&aptos->context);
-  setcontext(&exec->context);
-  //swapcontext(&maintcb->context, &exec->context);
+  //getcontext(&aptos->context);
+  //setcontext(&exec->context);
+  swapcontext(&maintcb->context, &exec->context);
   return;
 }
 
@@ -99,28 +99,31 @@ int piyield(void){
 }
 
 int piwait(int tid){
+  printf("piwait com tid %d. ID=%d\n", tid, id);
   if (id == 0){ //nao inicializada
     return -1;
   }
-  printf("-Piwait\n");
-  /*printf("piwait com tid %d. ID=%d\n", tid, id);
   print_list(aptos);
   print_list(aptos_exp);
-  print_list(exec);
-  print_list(bloqueados);
-  */
-  /*if( (find_tid(aptos, tid) == NULL) && (find_tid(aptos_exp, tid) == NULL) ){  //
+  if( (find_tid(aptos, tid) == NULL) && (find_tid(aptos_exp, tid) == NULL) ){  //
     printf("Fudeu!\n");
     return -1;  //Não foi possível executar wait com esse tid.
   }
-  */
+  //find_tid(aptos, tid)
+  //troca thread para lista de bloqueados
+  temp = find_tid(aptos, id);
+  aptos = remove_element(aptos, temp);
+  bloqueados = insert_element(bloqueados, temp);
+  printf("Diminuindo credReal da thread %d\n", temp->tid);
+  temp->credReal = (temp->credReal) - 10;
+  getcontext(&temp->context); //salva o contexto atual
+  setcontext(&aptos->context);
 
-  //printf("piwait          Ajusta creditos.\n");
-  exec->credReal = (exec->credReal) - 10; //atualiza os creditos
-  exec->state = (-1) * tid;  //HACK, salva qual a thread que originou o bloqueio
-  //printf("piwait          Bloqueia.\n");
-  bloqueados = insert_element(bloqueados, exec);  //troca de executando pra bloqueado
-  sched();
+  //printf("credReal %d\n", tcb[tid]->credReal);
+  //swapcontext(&context, &(tcb[tid]->context));
+  //printf("tid: %d\n", tid);
+  //printf("%p\n", &(tcb[tid]->context));
+  //setcontext(&(tcb[tid]->context));
   return 0;
 }
 
