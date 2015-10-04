@@ -6,7 +6,10 @@ TCB_t *bloqueados = NULL; //lista de bloqueados
 TCB_t *exec = NULL; //'lista' da thread em execução
 TCB_t *maintcb = NULL;
 TCB_t *temp = NULL; //ponteiro temporario
+
 ucontext_t context; //Armazena o contexto
+
+ucontext_t pi_exit_context;
 //char stack[SIGSTKSZ]; //pilha para contextos
 char stack[65536] = ""; //pilha para contextos
 int id = 0; //controle de IDs de threads
@@ -50,15 +53,27 @@ void sched(void)
   dispatcher();
 }
 
+void pi_exit(int status)
+{
+  
+}
+
+int pi_init(void)
+{
+  exec = insert_new(aptos, 100, id);
+  exec->next = NULL;
+  exec->prev = NULL;
+  getcontext(&pi_exit_context);
+  pi_exit_context.uc_stack.ss_sp = malloc(sizeof(stack));
+  pi_exit_context.uc_stack.ss_size = sizeof(stack);
+  makecontext(&pi_exit_context, pi_exit, 1, 0);
+  return 0;
+}
+
 int picreate (int credCreate, void* (*start)(void*), void *arg){
   if (id == 0){ //primeira thread(main), inicializando biblioteca.
-    exec = insert_new(aptos, 100, id);
-    maintcb = exec;
-    //printf("main context: %p\n", maintcb->context);
-    //printf("main context uclink: %p\n", maintcb->context.uc_link);
-    getcontext(&maintcb->context);
+    pi_init();
   }
-
   id = id+1;
   printf("Picreate - incrementei ID para: %d\n", id);
   aptos = insert_new(aptos, credCreate, id);
@@ -103,8 +118,8 @@ int piwait(int tid){
   if (id == 0){ //nao inicializada
     return -1;
   }
-  print_list(aptos);
-  print_list(aptos_exp);
+  //print_list(aptos);
+  //print_list(aptos_exp);
   if( (find_tid(aptos, tid) == NULL) && (find_tid(aptos_exp, tid) == NULL) ){  //
     printf("Fudeu!\n");
     return -1;  //Não foi possível executar wait com esse tid.
