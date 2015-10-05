@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
   int	id1, id2, id3, id4;
 	int i = 20;
 
-    id1 = picreate(10, func0, (void *)&i);
+    id1 = picreate(21, func0, (void *)&i);
     id2 = picreate(20, func1, (void *)&i);
 		//id3 = picreate(30, func2, (void *)&i);
 		printf("Eu sou a main apos a criacao de ID1, ID2 e ID3\n");

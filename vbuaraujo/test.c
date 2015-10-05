@@ -4,7 +4,7 @@
 void thread1(int arg) {
 	printf("1: Thread started with argument %d.\n", arg);
 	int i;
-	for (i=0; i<5; i++) {
+	for (i=0; i<3; i++) {
 		printf("1\n");
 		so_yield();
 	}
@@ -15,7 +15,7 @@ void thread1(int arg) {
 void thread2(int arg) {
 	printf("2: Thread started with argument %d.\n", arg);
 	int i, status;
-	for (i=0; i<10; i++) {
+	for (i=0; i<5; i++) {
 		if (i==3) {
 			printf("2: Waiting for %d to finish.\n", arg);
 			so_join(arg, &status);
@@ -32,7 +32,7 @@ void thread2(int arg) {
 void thread3(int arg) {
 	printf("2: Thread started with argument %d.\n", arg);
 	int i, status;
-	for (i=0; i<15; i++) {
+	for (i=0; i<7; i++) {
 		if (i==2) {
 			printf("3: Waiting for %d to finish.\n", arg);
 			so_join(arg, &status);

@@ -3,32 +3,31 @@
 
 TCB_t *new_element(TCB_t *element, int new_tid, int new_credCreate)
 { //Aloca e configura um novo TCB.
-    TCB_t *new;
-    new = malloc(sizeof(TCB_t));
-    new->tid = new_tid;
-    new->state = 1;
-    new->credCreate = new_credCreate;
-    new->credReal = new_credCreate;
-
-    if(element == NULL){   //primeiro elemento, estava vazia
-      new->prev = NULL;
-      new->next = NULL;
-      return new;
-    }
-    if(element->credCreate >= new_credCreate){ //meio ou fim
-      new->prev = element;
-      new->next = element->next;
-      if (element->next != NULL){ //meio
-	       element->next->prev = new;
-      }
-      element->next = new;
-    }
-    else{ //comeco da lista
-      new->prev = NULL;
-      new->next = element;
-      element->prev = new;
-    }
+  TCB_t *new;
+  new = malloc(sizeof(TCB_t));
+  new->tid = new_tid;
+  new->state = 1;
+  new->credCreate = new_credCreate;
+  new->credReal = new_credCreate;
+  if(element == NULL){   //primeiro elemento, estava vazia
+    new->prev = NULL;
+    new->next = NULL;
     return new;
+  }
+  if(element->credCreate >= new_credCreate){ //se meio ou fim
+    new->prev = element;
+    new->next = element->next;
+    if (element->next != NULL){ //meio
+       element->next->prev = new;
+    }
+    element->next = new;
+  }
+  else{ //senao, comeco da lista
+    new->prev = NULL;
+    new->next = element;
+    element->prev = new;
+  }
+  return new;
 }
 
 TCB_t *remove_element(TCB_t *first, TCB_t *removed)
@@ -45,8 +44,6 @@ TCB_t *remove_element(TCB_t *first, TCB_t *removed)
         first->prev = NULL;
       }
     }
-    removed->next = NULL;
-    removed->prev = NULL;
     removed->next = NULL;
     removed->prev = NULL;
     return first;
@@ -82,14 +79,11 @@ TCB_t *find_element(TCB_t *first, int credReal)
 TCB_t *find_tid(TCB_t *first, int tid)
 { //Retorna o ponteiro para thread com o id procurado, ou NULL
   if(first != NULL){ //lista nao vazia
-    do{
-      if(first->tid == tid){
+    do {
+      if(first->tid == tid)
         return first; //encontrado
-      }
-      else{
-	       first=first->next;
-      }
-    }while (first->next != NULL);
+      first = first->next;
+    } while (first != NULL);
   }
   return NULL; //nao encontrado
 }
@@ -170,6 +164,7 @@ TCB_t *insert_new(TCB_t *first, int credCreate, int tid)
   if( (found == NULL) || ( (found == first)&&(credCreate > found->credCreate) ) ){
     first = new;
   }
+  getcontext(&new->context);
   return first;
 }
 
@@ -186,6 +181,8 @@ void print_element(TCB_t *element){
     printf("element->next       = %p\n",element->next);
     printf("---------------------------------------------\n");
   }
+  else
+  printf("%p\n", element);
 }
 
 void print_list(TCB_t *first){
@@ -199,7 +196,7 @@ void print_list(TCB_t *first){
       printf("list->state      = %d    \n",first->state);
       printf("list->credCreate = %d    \n",first->credCreate);
       printf("list->credReal   = %d    \n",first->credReal);
-      printf("first->context   = %p    \n",&first->context);
+      printf("list->context   = %p    \n",&first->context);
       if(first->prev!=NULL){
         printf("list->prev       = %d\n",first->prev->tid);//0x%08x\n",first->prev);
       }
