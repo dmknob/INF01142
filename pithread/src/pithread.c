@@ -19,7 +19,8 @@ void dispatcher(void)
   //swapcontext(&maintcb->context, &exec->context);
   printf("Exec TCB: ");
   print_element(exec);
-  setcontext(&exec->context);
+  //setcontext(&exec->context);
+  swapcontext(&maintcb->context, &exec->context);
 }
 
 void sched(void)
@@ -37,11 +38,11 @@ void sched(void)
         pi_exit(0);  //Encerra OK
       }
       printf("Ngm apto, mas tem bloqueados..\n");
-      pi_exit(-1);  //Encerra reclamando..
+      return(-1);  //Encerra reclamando..
     }
   }
-  exec = aptos;
-  aptos = remove_element(aptos, exec);  //Remove exec da fila de aptos
+  exec = aptos; //Pega o proximo TCB a executar
+  aptos = remove_element(aptos, exec);  //Remove ele da fila de aptos
   printf("Exec TCB: ");
   print_element(exec);
   dispatcher();
@@ -52,7 +53,12 @@ void pi_exit(int status)
   printf("--pi_exit - %d\n", status);
   //if (aptos != NULL)
   //{ //Tem mais thread pra executar
-    //printf("Tem mais por executar.\n");
+  //printf("Tem mais por executar.\n");
+  printf("Exec TID: %d\n", exec->tid);
+  printf("Exec TCB: ");
+  print_element(exec);
+  printf("->\n");
+  getchar();
   sched();
   //}
   //printf("Trocando context.\n");
@@ -109,6 +115,8 @@ int piyield(void){
     return -1;
   }
   printf("-Piyield\n");
+  printf("Exec TCB: ");
+  print_element(exec);
   exec->credReal = exec->credReal - 10;  //Ajusta creditos
   aptos = insert_element(aptos, exec);  //Reinsere na lista de aptos a thread que chamou piyield
   sched();
@@ -131,7 +139,6 @@ int piwait(int tid){
   //print_list(aptos);
   exec->credReal = exec->credReal - 10;  //Ajusta creditos
   bloqueados = insert_element(bloqueados, exec);  //Bloquea a thread que chamou piwait
-
   printf("MainTCB: ");
   print_element(maintcb);
   printf("Exec TCB: ");
