@@ -27,15 +27,5 @@ pithread.o:
 listmanager.o:
 	$(CC) -g -O0 -o $(BIN_DIR)/listmanager.o -c $(SRC_DIR)/listmanager.c -Wall
 
-regra1: #dependências para a regra1
-	$(CC) -o $(BIN_DIR)regra1 $(SRC_DIR)regra1.c -Wall
-
-regra2: #dependências para a regra2
-	$(CC) -o $(BIN_DIR)regra2 $(SRC_DIR)regra2.c -Wall
-
-regran: #dependências para a regran
-	$(CC) -o $(BIN_DIR)regran $(SRC_DIR)regran.c -Wall
-
 clean:
 	rm -rf $(LIB_DIR)/*.a $(BIN_DIR)/*.o $(TST_DIR)/*.x $(TST_DIR)/*.o  $(SRC_DIR)/*~ $(INC_DIR)/*~ *~
-	ls -R

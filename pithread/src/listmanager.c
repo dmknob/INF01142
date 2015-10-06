@@ -6,7 +6,7 @@ TCB_t *new_element(TCB_t *element, int new_tid, int new_credCreate)
   TCB_t *new;
   new = malloc(sizeof(TCB_t));
   new->tid = new_tid;
-  new->state = 1;
+  new->state = 0;
   new->credCreate = new_credCreate;
   new->credReal = new_credCreate;
   if(element == NULL){   //primeiro elemento, estava vazia
